@@ -3,12 +3,9 @@
 <h1>Posts</h1>
 
 <div id="posts">
-  <% @posts.each do |post| %>
-    <%= render post %>
-    <p>
-      <%= link_to "Show this post", post %>
-    </p>
-  <% end %>
+  <%= render @posts %>
 </div>
 
-<%= link_to "New post", new_post_path %>
+<button type="button" class="inline-block px-4 py-2 bg-cyan-100 rounded-md shadow">
+  <%= link_to "New post", new_post_path %>
+</button>

@@ -1,0 +1,33 @@
+---
+
+require:
+  - rubocop-performance
+  - rubocop-rails
+
+AllCops:
+  Exclude:
+    - 'bin/**'
+    - 'db/**/*'
+    - 'db/schema.rb'
+    - 'vendor/**/*'
+    - 'db/migrate/**'
+    - 'node_modules/**/*'
+  NewCops: enable
+
+Style/FrozenStringLiteralComment:
+  SafeAutoCorrect: true
+
+Layout/LineLength:
+  Enabled: false
+
+Metrics/AbcSize:
+  Enabled: false
+
+Metrics/MethodLength:
+  Enabled: false
+
+Style/Documentation:
+  Enabled: false
+
+Metrics/BlockLength:
+  Enabled: false
