@@ -76,19 +76,16 @@ jobs:
           command: bundle exec rubocop
 
       # run tests!
+      - run: mkdir -p ~/test-results/rspec
       - run:
           name: run tests
           command: |
-            mkdir -p test-results/rspec
-            TEST_FILES="$(circleci tests glob "spec/**/*_spec.rb" | circleci tests split --split-by=timings)"
-
-            bundle exec rspec --format progress \
-                            --format RspecJunitFormatter \
-                            --out test-results/rspec/rspec.xml \
-                            --format progress \
-                            $TEST_FILES
+            circleci tests glob "spec/**/*_spec.rb" | circleci tests run --command="xargs \
+              bundle exec rspec --format progress \
+                                --format RspecJunitFormatter \
+                                --o ~/test-results/rspec/rspec.xml" --verbose --split-by=timings
       - store_test_results:
-          path: test-results
+          path: ~/test-results
 
       # collect reports
       - store_artifacts:
