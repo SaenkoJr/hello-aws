@@ -1,0 +1,122 @@
+# Ruby CircleCI 2.0 configuration file
+#
+# Check https://circleci.com/docs/2.0/language-ruby/ for more details
+#
+version: 2.1
+jobs:
+  build:
+    resource_class: small
+    working_directory: ~/app
+    docker:
+      - image: cimg/ruby:3.2.2-node
+        environment:
+          BUNDLE_JOBS: 4
+          BUNDLE_RETRY: 3
+          BUNDLE_PATH: vendor/bundle
+          DATABASE_HOST: 127.0.0.1
+          DATABASE_USER: circleci
+          NODE_VERSION: 14.17.3
+          RAILS_ENV: test
+          SKIP_SASS_BINARY_DOWNLOAD_FOR_CI: true
+          SKIP_NODE_SASS_TESTS: true
+
+
+      - image: cimg/postgres:13.14
+        environment:
+          POSTGRES_USER: circleci
+          POSTGRES_DB: app_test
+          POSTGRES_PASSWORD: ""
+
+      - image: cimg/redis:7.2
+
+    steps:
+      - checkout
+
+      # Bundle cache
+      - restore_cache:
+          keys:
+            - gem-cache-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
+            - gem-cache-{{ .Branch }}
+            - gem-cache
+
+      - run:
+          name: install dependencies
+          command: |
+            bundle install --jobs=4 --retry=3 --path vendor/bundle
+
+      - save_cache:
+          key: gem-cache-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
+          paths:
+            - vendor/bundle
+
+      # Js cache
+      - restore_cache:
+          keys:
+            - yarn-packages-v1-{{ .Branch }}-{{ checksum "yarn.lock" }}
+            - yarn-packages-v1-{{ .Branch }}-
+            - yarn-packages-v1-
+
+      - run:
+          name: install js dependencies
+          command: |
+            yarn install
+
+      - save_cache:
+          key: yarn-packages-v1-{{ .Branch }}-{{ checksum "yarn.lock" }}
+          paths:
+            - ~/.cache/yarn
+
+      # Database setup
+      - run: bundle exec rake db:create
+      - run: bundle exec rake db:schema:load
+
+      # run rubocop!
+      - run:
+          name: run rubocop
+          command: bundle exec rubocop
+
+      # run tests!
+      - run: mkdir -p ~/test-results/rspec
+      - run:
+          name: run tests
+          command: |
+            circleci tests glob "spec/**/*_spec.rb" | circleci tests run --command="xargs \
+              bundle exec rspec --format progress \
+                                --format RspecJunitFormatter \
+                                --o ~/test-results/rspec/rspec.xml" --verbose --split-by=timings
+      - store_test_results:
+          path: ~/test-results
+
+      # collect reports
+      - store_artifacts:
+          path: ~/app/coverage
+          destination: coverage
+
+  security:
+    resource_class: small
+    docker:
+      - image: cimg/ruby:3.2.2-node
+    steps:
+      - checkout
+      - run:
+          name: Install Bundler-audit
+          command: gem install bundler-audit
+      - run:
+          name: Run Bundle-audit
+          command: bundle exec bundle audit check --update
+
+workflows:
+  version: 2
+  commit:
+    jobs:
+      - build
+  nightly:
+    jobs:
+      - security
+    triggers:
+      - schedule:
+          cron: "0 0 * * *"
+          filters:
+            branches:
+              only:
+                - main
