@@ -1,0 +1,8 @@
+{
+  "name": "hello-aws",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:SaenkoJr/hello-aws.git",
+  "author": "Maksym Saienko <mms.slim.one@gmail.com>",
+  "license": "MIT"
+}

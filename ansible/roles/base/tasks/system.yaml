@@ -1,0 +1,42 @@
+---
+
+- name: 'Upgrade system'
+  apt:
+    upgrade: dist
+
+- name: 'Update pckgs'
+  apt:
+    name: '*'
+    state: latest
+
+- name: Install deps
+  apt:
+    name: "{{ item }}"
+    state: latest
+  with_items:
+    - curl
+    - python3-pip
+    - python3-setuptools
+    - virtualenv
+    - tzdata
+    - git
+    - acl
+    - build-essential
+    - rbenv
+    - zsh
+    - libffi-dev
+    - libssl-dev
+    - libedit-dev
+    - libyaml-dev
+
+- name: 'Create deploy user'
+  user:
+    name: deploy
+    shell: /bin/bash
+    groups: "sudo"
+    append: true
+
+- name: 'Add SSH key to server'
+  authorized_key:
+    user: deploy
+    key: "{{ lookup('file', '~/.ssh/deploy_id_rsa.pub') }}"

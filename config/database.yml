@@ -14,10 +14,6 @@ test:
   <<: *default
   database: hello_aws_test
 
-staging:
-  <<: *default
-  database: <%= ENV.fetch('DATABASE_URL', 'localhost') %>
-
 production:
   <<: *default
   database: <%= ENV.fetch('DATABASE_URL', 'localhost') %>

@@ -1,0 +1,7 @@
+---
+
+- name: Install nodejs
+  include_tasks: nodejs.yaml
+
+- name: Install ruby
+  include_tasks: ruby.yaml

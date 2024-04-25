@@ -1,0 +1,29 @@
+---
+
+- name: register rbenv root
+  become_user: deploy
+  command: rbenv root
+  register: rbenv_root
+
+- name: install ruby-build rbenv plugin
+  become_user: deploy
+  git:
+    repo: https://github.com/rbenv/ruby-build.git
+    dest: "{{ rbenv_root.stdout }}/plugins/ruby-build"
+
+- name: install ruby 3.2.2
+  become_user: deploy
+  command: rbenv install 3.2.2
+  args:
+    creates: "{{ rbenv_root.stdout }}/versions/3.2.2/bin/ruby"
+  environment:
+    RBENV_ROOT: "{{ rbenv_root.stdout }}"
+    CONFIGURE_OPTS: "--disable-install-rdoc"
+    PATH: "{{ rbenv_root.stdout }}/shims:{{ ansible_env.PATH }}"
+
+- name: install bundler
+  become_user: deploy
+  gem:
+    name: bundler
+  environment:
+    PATH: "{{ rbenv_root.stdout }}/shims:{{ ansible_env.PATH }}"

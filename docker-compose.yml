@@ -23,7 +23,7 @@ services:
     stdin_open: true
     tty: true
   db:
-    image: postgres:13-alpine
+    image: postgres:latest-alpine
     volumes:
       - pgdata:/var/lib/postgresql/data
     ports:
