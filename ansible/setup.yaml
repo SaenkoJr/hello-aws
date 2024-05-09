@@ -5,10 +5,10 @@
   vars_files:
     - app-vars.yaml
   roles:
-    # - common
-    # - user
-    # - ssh
-    # - docker
-    # - ruby
-    # - nodejs
+    - common
+    - user
+    - ssh
+    - docker
+    - ruby
+    - nodejs
     - nginx

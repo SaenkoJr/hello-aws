@@ -2,7 +2,11 @@
 
 - name: Add nginx repo
   apt_repository:
-    repo: ppa:nginx/stable
+    repo: "{{ item }}"
+    state: present
+  with_items:
+    - "deb https://nginx.org/packages/ubuntu/ {{ ansible_distribution_release }} nginx"
+    - "deb-src https://nginx.org/packages/ubuntu/ {{ ansible_distribution_release }} nginx"
 
 - name: Install nginx
   apt:

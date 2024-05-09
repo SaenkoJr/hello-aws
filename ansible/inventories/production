@@ -1,5 +1,5 @@
 [prod]
-ec2-18-184-71-168.eu-central-1.compute.amazonaws.com
+ec2-3-122-115-197.eu-central-1.compute.amazonaws.com
 
 [all:vars]
 ansible_user=ubuntu

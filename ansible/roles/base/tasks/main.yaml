@@ -1,7 +1,0 @@
----
-
-- name: System
-  include_tasks: system.yaml
-
-- name: Docker
-  include_tasks: docker.yaml

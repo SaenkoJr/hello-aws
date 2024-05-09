@@ -1,5 +1,9 @@
 ---
 
+- name: 'Upgrade system'
+  apt:
+    upgrade: dist
+
 - name: Install required system packages
   apt:
     name: "{{ item }}"
