@@ -4,7 +4,9 @@ version: '3.9'
 
 services:
   web:
-    build: .
+    build:
+      context: .
+      dockerfile: dev.Dockerfile
     command: 'make start'
     ports:
       - 5555:5555
@@ -23,7 +25,7 @@ services:
     stdin_open: true
     tty: true
   db:
-    image: postgres:latest-alpine
+    image: postgres:16.3-alpine
     volumes:
       - pgdata:/var/lib/postgresql/data
     ports:

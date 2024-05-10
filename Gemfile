@@ -65,6 +65,13 @@ group :development do
 
   # Speed up commands on slow machines / big apps [https://github.com/rails/spring]
   # gem "spring"
+
+  gem 'bcrypt_pbkdf'
+  gem 'capistrano', require: false
+  gem 'capistrano3-puma', github: 'seuros/capistrano-puma', require: false
+  gem 'capistrano-bundler', require: false
+  gem 'capistrano-rails', require: false
+  gem 'ed25519'
 end
 
 group :test do
@@ -73,6 +80,10 @@ group :test do
   gem 'rspec_junit_formatter', require: false
   gem 'rspec-rails'
   gem 'selenium-webdriver'
+end
+
+group :production do
+  gem 'sqlite3', '~> 1.3'
 end
 
 gem 'tailwindcss-rails'

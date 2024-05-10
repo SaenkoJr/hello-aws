@@ -15,5 +15,6 @@ test:
   database: hello_aws_test
 
 production:
-  <<: *default
-  database: <%= ENV.fetch('DATABASE_URL', 'localhost') %>
+  adapter: sqlite3
+  timeout: 5000
+  database: db/production.sqlite3
