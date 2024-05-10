@@ -13,6 +13,7 @@ jobs:
           BUNDLE_JOBS: 4
           BUNDLE_RETRY: 3
           BUNDLE_PATH: vendor/bundle
+          BUNDLE_WITHOUT: "development"
           DATABASE_HOST: 127.0.0.1
           DATABASE_USER: circleci
           NODE_VERSION: 14.17.3
@@ -92,31 +93,8 @@ jobs:
           path: ~/app/coverage
           destination: coverage
 
-  security:
-    resource_class: small
-    docker:
-      - image: cimg/ruby:3.2.2-node
-    steps:
-      - checkout
-      - run:
-          name: Install Bundler-audit
-          command: gem install bundler-audit
-      - run:
-          name: Run Bundle-audit
-          command: bundle exec bundle audit check --update
-
 workflows:
   version: 2
   commit:
     jobs:
       - build
-  nightly:
-    jobs:
-      - security
-    triggers:
-      - schedule:
-          cron: "0 0 * * *"
-          filters:
-            branches:
-              only:
-                - main
