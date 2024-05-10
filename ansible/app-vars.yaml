@@ -1,0 +1,71 @@
+---
+
+# --- common ---
+app_name: hello-aws
+deploy_user: deploy
+deploy_group: "{{ deploy_user }}"
+deploy_user_path: "/home/{{ deploy_user }}"
+app_git_repo: https://github.com/saenkojr/hello-aws
+app_git_branch: main
+
+# --- deps ---
+required_packages:
+  - acl
+  - autoconf
+  - bison
+  - build-essential
+  - dirmngr
+  - gnupg
+  - libcurl4-openssl-dev
+  - libedit-dev
+  - libffi-dev
+  - libgdbm-dev
+  - libgdbm6
+  - libjemalloc-dev # jemalloc
+  - libncurses5-dev
+  - libpq-dev # postgresql client
+  - libreadline-dev
+  - libreadline6-dev
+  - libssl-dev
+  - libxml2-dev
+  - libxslt1-dev
+  - libyaml-dev
+  - zlib1g-dev
+
+# --- rails app ---
+app_root_path:      "{{ deploy_user_path }}/{{ app_name }}"
+app_current_path:   "{{ app_root_path }}/current"
+app_releases_path:  "{{ app_root_path }}/releases"
+app_shared_path:    "{{ app_root_path }}/shared"
+app_pids_path:      "{{ app_shared_path }}/tmp/pids"
+app_logs_path:      "{{ app_shared_path }}/logs"
+app_sockets_path:   "{{ app_shared_path }}/sockets"
+rails_db_pool:      20
+rails_environment:  production
+
+# --- puma ---
+puma_service_file:  "puma.service.j2"
+puma_config_file:   "{{ app_current_path }}/config/puma.rb"
+puma_socket:        "{{ app_sockets_path }}/puma.sock"
+puma_web_concurrency: 2
+
+# --- certbot ---
+certbot_email: mm.saenko@gmail.com
+certbot_domains:
+  - ec2-18-184-71-168.eu-central-1.compute.amazonaws.com
+
+# --- nodejs ---
+nodejs_version: "20.x"
+
+# --- ruby ---
+ruby_version: "3.2.2"
+rbenv_root_path: "{{ deploy_user_path }}/.rbenv"
+rbenv_shell_rc_path: "{{ deploy_user_path }}/.bashrc"
+rubies_path: "{{ rbenv_root_path }}/versions"
+ruby_path: "{{ rubies_path }}/{{ ruby_version }}"
+rbenv_bin: "{{ rbenv_root_path }}/bin/rbenv"
+rbenv_bundle: "{{ rbenv_root_path }}/shims/bundle"
+
+# --- nginx ---
+nginx_https_enabled: false
+nginx_conf_template: "nginx.conf.j2"
