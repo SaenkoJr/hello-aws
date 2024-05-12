@@ -5,7 +5,7 @@
 # Defines a single server with a list of roles and multiple properties.
 # You can define all roles on a single server, or split them:
 
-server 'ec2-3-68-160-240.eu-central-1.compute.amazonaws.com', user: fetch(:user), roles: %w[app db web]
+server 'ec2-35-156-88-65.eu-central-1.compute.amazonaws.com', user: fetch(:user), roles: %w[app db web]
 # server "example.com", user: "deploy", roles: %w{app web}, other_property: :other_value
 # server "db.example.com", user: "deploy", roles: %w{db}
 
@@ -37,12 +37,12 @@ server 'ec2-3-68-160-240.eu-central-1.compute.amazonaws.com', user: fetch(:user)
 #
 # Global options
 # --------------
-set :ssh_options, {
-  user: fetch(:user),
-  keys: %w[~/.ssh/deploy_id_rsa],
-  forward_agent: false,
-  auth_methods: %w[publickey]
-}
+# set :ssh_options, {
+#   user: fetch(:user),
+#   keys: %w[~/.ssh/hello_aws_deploy_id],
+#   forward_agent: false,
+#   auth_methods: %w[publickey password]
+# }
 #
 # The server-based syntax can be used to override options:
 # ------------------------------------

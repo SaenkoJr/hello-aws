@@ -6,6 +6,7 @@ lock '~> 3.18.1'
 set :user, 'deploy'
 set :application, 'hello-aws'
 set :repo_url, 'git@github.com:SaenkoJr/hello-aws.git'
+set :branch, 'main'
 
 # Default branch is :master
 # ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
