@@ -74,7 +74,7 @@ jobs:
       # run rubocop!
       - run:
           name: run rubocop
-          command: bundle exec rubocop
+          command: bundle exec rubocop -A
 
       # run tests!
       - run: mkdir -p ~/test-results/rspec
